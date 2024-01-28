@@ -9,6 +9,7 @@ galleryList.insertAdjacentHTML("beforeend", galleryMarkup);
 galleryList.addEventListener("click", onClick);
 
 function onClick(evt) {
+  // prevent default moves, for example 'download img'
   evt.preventDefault();
 
   const isActive = evt.target.classList.contains("gallery__image");
@@ -17,15 +18,23 @@ function onClick(evt) {
     return;
   }
 
+  // open modal with lightbox
+
   const originalImage = evt.target.dataset.source;
+  // lightboxFunction(originalImage);
+  const instance = basicLightbox.create(`
+      <img src="${originalImage}" width="800" height="600">
+  `);
+  instance.show();
 
-  lightboxFunction(originalImage);
+  // close on Escape
+  galleryList.addEventListener("keydown", onCloseEscape);
 
-  //   const instance = basicLightbox.create(`
-  //     <img src="${originalImage}" width="800" height="600">
-  // `);
-
-  //   instance.show();
+  function onCloseEscape(evt) {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+  }
 }
 
 function createGallery(gallery) {
@@ -45,10 +54,20 @@ function createGallery(gallery) {
     .join("");
 }
 
-function lightboxFunction(img) {
-  const instance = basicLightbox.create(`
-    <img src="${img}" width="800" height="600">
-`);
+// function lightboxFunction(img) {
+//   const instance = basicLightbox.create(`
+//     <img src="${img}" width="800" height="600">
+// `);
 
-  instance.show();
-}
+//   instance.show();
+// }
+
+// function onCloseEscape(evt) {
+//   const visible = basicLightbox.visible();
+
+//   if (visible) {
+//   if (evt.code === "Escape") {
+//     instance.close();
+//   }
+// }
+// }
